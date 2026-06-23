@@ -1,6 +1,6 @@
 # DD World School Resource Assistant
 
-A local AI education platform with a polished Next.js frontend and a FastAPI backend. Students can sign up, use the AI tutor workspace, generate quizzes, submit answers, review explanations, and view dashboard/history data.
+A local AI education platform with a polished Next.js frontend, Clerk authentication, and a FastAPI backend. Students can sign up, sign in with Google, use the AI tutor workspace, generate quizzes, submit answers, review explanations, and view dashboard/history data.
 
 No Docker is required.
 
@@ -63,25 +63,30 @@ http://localhost:3000
 Backend `backend/.env`:
 
 ```env
+CLERK_SECRET_KEY=
+CLERK_JWKS_URL=
 LLM_API_KEY=
 LLM_PROVIDER=deepseek
 MODEL_NAME=deepseek-chat
 LLM_BASE_URL=https://api.deepseek.com
 LLM_TEMPERATURE=0.2
+FRONTEND_ORIGINS=https://david-co.vercel.app
 ```
 
 Frontend `frontend/.env.local`:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_API_URL=https://david-co-backend.vercel.app/api/v1
 ```
 
 If `LLM_API_KEY` is empty, the backend uses local fallback tutor and quiz responses so the app still runs.
 
 ## API Routes
 
-- `POST /api/v1/auth/signup`
-- `POST /api/v1/auth/login`
+All app data routes require `Authorization: Bearer <Clerk session token>`.
+
 - `GET /api/v1/auth/me`
 - `POST /api/v1/learning/tutor`
 - `GET /api/v1/learning/sessions`
@@ -93,7 +98,7 @@ If `LLM_API_KEY` is empty, the backend uses local fallback tutor and quiz respon
 
 ## Troubleshooting
 
-- If the frontend says the backend is offline, start FastAPI with `uvicorn main:app --reload` inside `backend/`.
-- If login fails after restarting the backend, sign up or log in again. Access tokens are local and simple for development.
+- If protected pages redirect, check `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`.
+- If backend routes return 401, check `CLERK_JWKS_URL` and that the frontend is sending a Clerk session token.
 - If AI provider calls fail, check `LLM_API_KEY`, `LLM_PROVIDER`, `MODEL_NAME`, and `LLM_BASE_URL`.
 - If package install is slow on Windows, let `npm install` finish before running `npm run dev`.

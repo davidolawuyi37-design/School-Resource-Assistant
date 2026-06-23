@@ -1,3 +1,4 @@
+import { UserButton } from "@clerk/nextjs";
 import { Sidebar } from "@/components/Sidebar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -11,7 +12,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <p className="text-xs font-bold uppercase text-primary">DD World School Resource Assistant</p>
             <p className="text-sm text-muted-foreground">Personalized learning command center</p>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <UserButton />
+          </div>
         </div>
         <div className="p-4 lg:p-8">{children}</div>
       </section>

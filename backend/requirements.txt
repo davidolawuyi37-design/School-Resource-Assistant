@@ -4,3 +4,4 @@ python-dotenv
 pydantic[email]
 langchain
 langchain-openai
+PyJWT[crypto]

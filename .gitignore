@@ -10,6 +10,7 @@ frontend/.next/
 frontend/node_modules/
 frontend/out/
 frontend/npm-debug.log*
+frontend/tsconfig.tsbuildinfo
 
 backend/.env
 backend/venv/

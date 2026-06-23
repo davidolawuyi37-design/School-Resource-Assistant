@@ -22,24 +22,25 @@ http://localhost:8000/docs
 ## Environment
 
 ```env
+CLERK_SECRET_KEY=
+CLERK_JWKS_URL=
 LLM_API_KEY=
 LLM_PROVIDER=deepseek
 MODEL_NAME=deepseek-chat
 LLM_BASE_URL=https://api.deepseek.com
 LLM_TEMPERATURE=0.2
+FRONTEND_ORIGINS=https://david-co.vercel.app
 ```
 
 If `LLM_API_KEY` is empty, the backend returns local fallback lessons and quizzes so the frontend can still run.
 
 ## Routes
 
-- `POST /api/v1/auth/signup`
-- `POST /api/v1/auth/login`
-- `GET /api/v1/auth/me`
-- `POST /api/v1/learning/tutor`
-- `GET /api/v1/learning/sessions`
-- `POST /api/v1/learning/sessions`
-- `POST /api/v1/quiz/generate`
-- `POST /api/v1/quiz/submit`
-- `GET /api/v1/quiz/history`
-- `GET /api/v1/analytics/summary`
+- `GET /api/v1/auth/me` - requires Clerk Bearer token
+- `POST /api/v1/learning/tutor` - requires Clerk Bearer token
+- `GET /api/v1/learning/sessions` - requires Clerk Bearer token
+- `POST /api/v1/learning/sessions` - requires Clerk Bearer token
+- `POST /api/v1/quiz/generate` - requires Clerk Bearer token
+- `POST /api/v1/quiz/submit` - requires Clerk Bearer token
+- `GET /api/v1/quiz/history` - requires Clerk Bearer token
+- `GET /api/v1/analytics/summary` - requires Clerk Bearer token

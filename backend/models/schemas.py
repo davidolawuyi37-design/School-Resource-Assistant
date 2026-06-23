@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
 
 
 EducationLevel = Literal["Early Childhood", "Primary", "Secondary", "Tertiary"]
@@ -9,23 +9,8 @@ EducationLevel = Literal["Early Childhood", "Primary", "Secondary", "Tertiary"]
 class User(BaseModel):
     id: str
     full_name: str
-    email: EmailStr
+    email: str
     role: str = "student"
-
-
-class SignupRequest(BaseModel):
-    full_name: str = Field(..., min_length=2)
-    email: EmailStr
-    password: str = Field(..., min_length=4)
-
-
-class LoginRequest(BaseModel):
-    email: EmailStr
-    password: str = Field(..., min_length=1)
-
-
-class TokenResponse(BaseModel):
-    access_token: str
 
 
 class LearningSessionCreate(BaseModel):

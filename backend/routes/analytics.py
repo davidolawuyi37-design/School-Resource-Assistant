@@ -1,6 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from models.schemas import AnalyticsSummary
+from services.clerk_auth import ClerkUser, require_clerk_user
 from services.session_store import store
 
 
@@ -8,9 +9,9 @@ router = APIRouter(prefix="/analytics", tags=["analytics"])
 
 
 @router.get("/summary", response_model=AnalyticsSummary)
-def summary():
-    sessions = store.list_sessions()
-    quiz_results = store.list_quiz_results()
+def summary(user: ClerkUser = Depends(require_clerk_user)):
+    sessions = store.list_sessions(user.user_id)
+    quiz_results = store.list_quiz_results(user.user_id)
     subjects = {session.subject for session in sessions}
 
     average_score = 0

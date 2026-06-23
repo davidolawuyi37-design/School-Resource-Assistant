@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
 from models.schemas import QuizGenerateRequest, QuizGenerateResponse, QuizResult, QuizSubmitRequest
 from services import quiz_service
+from services.clerk_auth import ClerkUser, require_clerk_user
 from services.session_store import store
 
 
@@ -9,8 +10,9 @@ router = APIRouter(prefix="/quiz", tags=["quiz"])
 
 
 @router.post("/generate", response_model=QuizGenerateResponse)
-def generate(payload: QuizGenerateRequest):
+def generate(payload: QuizGenerateRequest, user: ClerkUser = Depends(require_clerk_user)):
     return quiz_service.generate_quiz(
+        user_id=user.user_id,
         session_id=payload.session_id,
         education_level=payload.education_level,
         subject=payload.subject,
@@ -20,9 +22,10 @@ def generate(payload: QuizGenerateRequest):
 
 
 @router.post("/submit", response_model=QuizResult)
-def submit(payload: QuizSubmitRequest):
+def submit(payload: QuizSubmitRequest, user: ClerkUser = Depends(require_clerk_user)):
     try:
         return quiz_service.submit_quiz(
+            user_id=user.user_id,
             quiz_id=payload.quiz_id,
             answers=[answer.model_dump() for answer in payload.answers],
         )
@@ -31,5 +34,5 @@ def submit(payload: QuizSubmitRequest):
 
 
 @router.get("/history")
-def history():
-    return store.list_quiz_results()
+def history(user: ClerkUser = Depends(require_clerk_user)):
+    return store.list_quiz_results(user.user_id)
