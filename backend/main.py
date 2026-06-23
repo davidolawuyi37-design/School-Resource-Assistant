@@ -29,8 +29,16 @@ configured_origins = [
 
 app.add_middleware(
     CORSMiddleware,
+<<<<<<< HEAD
     allow_origins=default_origins + configured_origins,
     allow_origin_regex=r"https://.*\.vercel\.app",
+=======
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://david-school-frontend.vercel.app",
+    ],
+>>>>>>> e9026beb1a01cc6a5a906cb7cf08f045ce8ea374
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
